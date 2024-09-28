@@ -1,0 +1,102 @@
+{% load static %}
+{% load humanize %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-1"></div>
+        <!-- Левая часть: информация о заказе -->
+        <div class="col-md-5">
+            <div class="mb-3">
+                <div>
+                    {% if cart %}
+                        <div class="display-4">Итого <strong>{{ cart.total_quantity }}</strong> товар(а) на сумму
+                            <strong>{{ cart.total_price|intcomma }} ₽</strong></div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Ваш код для вывода итоговой суммы заказа -->
+            <h4>Номер телефона:</h4>
+            <div class="form-group mt-4">
+                <form action="{% url "order:create_order" %}" method="post">
+                    <input type="tel" value="{{ phone }}" class="form-control w-50 mb-3" id="phone" name="phone"
+                           placeholder="В формате +7 (777) 777-77-77">
+                    <div class="w-50">
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                    {% if not cart %}
+                        <button class="btn btn-warning btn-lg"
+                                id="createOrder" disabled type="button">
+                            Оформить заказ
+                        </button>
+                    {% else %}
+                        {% csrf_token %}
+                        <button class="btn btn-warning btn-lg" type="submit">
+                            Оформить заказ
+                        </button>
+                    {% endif %}
+                </form>
+            </div>
+        </div>
+        <!-- Правая часть: товары -->
+        <div class="col-md-5">
+            {% if not cart %}
+                <h4 class="float-left mt-5"><strong>Корзина пуста</strong></h4>
+            {% endif %}
+            {% for item in cart %}
+                <div class="row mb-5">
+                    <div class="col-md-4">
+                        {% with first_image=item.carpet_size.carpet.images.first %}
+                            <a href="{% url "catalog:carpet_details" carpet_id=item.carpet_size.carpet.pk %}">
+                                <img class="card-img-top rounded-lg img-fluid"
+                                     src="../../{{ first_image.image }}"
+                                     alt="Card image cap"
+                                     ondragstart="return false;">
+                            </a>
+                        {% endwith %}
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <a href="{% url "catalog:carpet_details" carpet_id=item.carpet_size.carpet.pk %}"
+                               class="text-decoration-none black text-white">
+                                <p class="card-title h1">
+                                    {{ item.carpet_size.carpet.name }}
+                                </p>
+                            </a>
+                            <div class="btn btn-secondary mb-2">
+                                {{ item.carpet_size.width }} x {{ item.carpet_size.length }} см.
+                            </div>
+                            <p class="card-text h3 mb-3">{{ item.carpet_size.price|intcomma }} ₽</p>
+                            <div class="btn-group" role="group" aria-label="Quantity">
+                                <button type="button" class="btn btn-danger decrement rounded"
+                                        data-cart-id="{{ item.id }}"
+                                        data-cart-change-url="{% url "order:cart_change_quantity" %}">
+                                    {% csrf_token %}-
+                                </button>
+                                <input type="number" disabled class="form-control number bg-dark border-0 text-warning"
+                                       value="{{ item.quantity }}">
+                                <button type="button" class="btn btn-success increment rounded"
+                                        data-cart-id="{{ item.id }}"
+                                        data-cart-change-url="{% url "order:cart_change_quantity" %}">
+                                    {% csrf_token %}
+                                    +
+                                </button>
+                                <a href="{% url "order:cart_remove" %}" class="remove-from-cart "
+                                   data-cart-id="{{ item.id }}">
+                                    {% csrf_token %}
+                                    <img class="mx-2" src="{% static "icons/delete.png" %}"
+                                         alt="Catalog Icon" width="32" height="36">
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+    </div>
+</div>
+

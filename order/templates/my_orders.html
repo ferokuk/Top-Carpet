@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% load my_tags %}
+{% load humanize %}
+{% load static %}
+{% block content %}
+    <div class="container-fluid custom-top-margin">
+        <div class="col-md-12">
+            <div class="p-4 mb-4 mx-2 rounded custom-shadow">
+                <h3 class="text-center mb-4">Мои заказы</h3>
+                <!-- Разметка заказов -->
+                <div class="container">
+                <div class="d-flex justify-content-center align-items-center">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                    <div class="accordion" id="accordionExample">
+                        {% if not orders %}
+                            <div class="display-3 text-dark text-center">Заказов нет</div>
+                        {% endif %}
+
+                        {% for order in orders %}
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="heading{{ order.id }}">
+                                    <button class="btn btn-outline-warning btn-block"
+                                            type="button" data-toggle="collapse"
+                                            data-target="#collapseExample{{ order.id }}"
+                                            aria-expanded="false"
+                                            aria-controls="collapseExample">
+                                        <span class="lead font-weight-bold">Заказ № {{ order.id }} - {{ order.created_at }}</span>
+                                    </button>
+                                </h2>
+                                <div id="collapseExample{{ order.id }}"
+                                     class="collapse {% if forloop.first %}show{% endif %}"
+                                     aria-labelledby="heading{{ order.id }}"
+                                >
+                                    <div class="accordion-body">
+                                        <table class="table table-dark table-hover">
+                                            <thead>
+                                            <tr>
+                                                <th>Ковёр</th>
+                                                <th>Количество</th>
+                                                <th>Цена</th>
+                                                <th>Общая стоимость</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for item in order.orderitem_set.all %}
+                                                <tr>
+                                                    <td><a class="lead font-weight-bold"
+                                                           href="{% url 'store:carpet_details' item.carpet_size.carpet.pk %}"
+                                                            style="color: {{ item.carpet_size.carpet.colors.first.hex_value }}">
+                                                        {{ item.carpet_size.carpet.name }}
+                                                        {{ item.carpet_size.width }} x {{ item.carpet_size.length }} см.
+                                                    </a>
+                                                    </td>
+                                                    <td class="font-weight-bold">{{ item.quantity }}</td>
+                                                    <td class="font-weight-bold">{{ item.price|intcomma }} ₽</td>
+                                                    <td class="font-weight-bold">{{ item.products_price|intcomma }} ₽
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                </div>
+                {% if orders %}
+                    <style>
+                        .page-item.active .page-link,
+                        .page-link:hover {
+                            background-color: orange;
+                            border-color: orange;
+                            color: white;
+                        }
+
+                        .page-link {
+                            color: orange;
+                        }
+                    </style>
+                    <nav>
+                        <ul class="pagination justify-content-center my-4 bg-dark navbar-dark">
+                            <div class="custom-shadow d-flex ">
+                                <li class="page-item {% if not orders.has_previous %}disabled{% endif %} ">
+                                    <a class="page-link" href="
+                        {% if orders.has_previous %}?
+                                        {% change_params page=orders.previous_page_number %}{% else %}#{% endif %}
+                    ">Назад</a>
+                                </li>
+
+                                {% for page in orders.paginator.page_range %}
+                                    {% if  page >= orders.number|add:-2 and page <= orders.number|add:2 %}
+                                        <li class="page-item {% if orders.number == page %}active{% endif %}">
+                                            <a class="page-link" href="?{% change_params page=page %}">{{ page }}</a>
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
+
+                                <li class="page-item {% if not orders.has_next %}disabled{% endif %} ">
+                                    <a class="page-link" href="
+                            {% if orders.has_next %}?
+                                        {% change_params page=orders.next_page_number %}{% else %}#{% endif %}
+                        ">Следующая</a>
+                                </li>
+                            </div>
+                        </ul>
+                    </nav>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

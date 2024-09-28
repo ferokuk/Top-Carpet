@@ -1,0 +1,165 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% load static %}
+{% block title %}
+    {{ title }}
+{% endblock %}
+{% block content %}
+    <div class="toast-container"></div>
+    <div class="container custom-top-margin mb-3">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <img src="../../../{{ carpet.images.first }}" ondragstart="return false;"
+                     class="img-fluid carpet-image-main">
+            </div>
+            <div class="col-md-4 mt-5">
+                <h1 class="display-4">{{ carpet.name }}</h1>
+                <div class="mb-1">
+                    <input hidden id="product_id" value="{{ carpet.id }}">
+                    <h5 class="text {% if sizes.first.quantity < 3 %}text-danger{% endif %}" id="quantity_inner">
+                        В наличии: <span id="quantity">{{ sizes.first.quantity|intcomma }}</span> шт.
+                    </h5>
+                    <h5 id="waiting_days" class="{% if sizes.first.quantity > 0 %}d-none{% endif %}">
+                        Примерное время ожидания: {{ sizes.first.waiting_days }} д.
+                    </h5>
+
+                    <h2 class="mt-3"><span id="price">{{ sizes.first.price|intcomma }}</span> ₽</h2>
+                    <div class="row">
+                        {% for size in sizes %}
+                            <div class="col-md-5">
+                                <div class="btn mb-1 size-btn {% if forloop.first %}active-orange-bg{% else %}btn-secondary{% endif %}" data-size-id="{{ size.id }}" data-url="{% url "store:get_quantity" %}">
+                                    {% csrf_token %}
+                                    {{ size.width }} x {{ size.length }} см.
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <button class="btn-warning btn btn-lg col-md-10"
+                        id="addToCart"
+                        data-url="{% url "order:add_to_cart" %}"
+                        data-carpet-id="{{ carpet.id }}"
+                        {% if sizes.first.quantity == 0 %}disabled{% endif %}>
+                    {% csrf_token %}
+                    Добавить в корзину
+                </button>
+
+            </div>
+        </div>
+        <div class="row justify-content-center mb-4">
+            <div class="col-md-12 align-self-center">
+                <div class="lead">
+                    {% if carpet.description %}
+                        {{ carpet.description }}
+                    {% else %}
+                        Описания нет
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-md-2 h3">
+                Категория:
+            </div>
+            <div class="col-md-4 h3">
+                <span class="h5">{{ carpet.category }}</span>
+            </div>
+            <div class="col-md-2 h4">
+                Высота ворса:
+            </div>
+            <div class="col-md-4 h3">
+                <span class="h5">{{ carpet.pile_height }} мм</span>
+            </div>
+
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-md-2 h3">
+                Страна:
+            </div>
+            <div class="col-md-4 h3">
+                <span class="h5">{{ carpet.country }}</span>
+            </div>
+            <div class="col-md-2 h3">
+                Форма:
+            </div>
+            <div class="col-md-4 h3">
+                <span class="h5">{{ carpet.shape }}</span>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-md-2 h3">
+                {% if carpet.materials.all|length == 1 %}
+                    Материал:
+                {% else %}
+                    Материалы:
+                {% endif %}
+            </div>
+
+            <div class="col-md-4 h3">
+
+                {% for material in carpet.materials.all %}
+                    <span class="h5"
+                          data-toggle="tooltip"
+                          data-placement="right"
+                          title="{{ material.description }}">
+                    {{ material.name }}
+                    </span>
+                    {% if not forloop.last %}<br>{% endif %}
+                {% endfor %}
+
+            </div>
+
+            <div class="col-md-2 h3">
+                {% if carpet.colors.all|length == 1 %}
+                    Цвет
+                {% else %}
+                    Цвета
+                {% endif %}:
+            </div>
+            <div class="col-md-4 h3">
+                {% for color in carpet.colors.all %}
+                    <span class="h5">
+                    {{ color.name }}
+                    <div class="color-circle" style="background-color: {{ color.hex_value }};"></div>
+                    </span>
+                    {% if not forloop.last %}<br>{% endif %}
+                {% endfor %}
+            </div>
+        </div>
+        {% if carpet.images.all|length > 1 %}
+            <div id="carouselExampleIndicators" class="carousel slide custom-top-margin" data-ride="carousel">
+    <ol class="carousel-indicators">
+        {% for image in carpet.images.all|slice:"1:" %}
+            <li data-target="#carouselExampleIndicators" data-slide-to="{{ forloop.counter0 }}"
+                class="{% if forloop.first %}active{% endif %}"></li>
+        {% endfor %}
+    </ol>
+    <div class="carousel-inner">
+        {% for image in carpet.images.all|slice:"1:" %}
+            <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                <!-- Wrap each image in a separate div -->
+                <div class="image-container">
+                    <img class="zoom-image d-block image-carousel img-fluid" src="../../../{{ image }}"
+                         alt="Carousel Image" style="margin: 0 auto;" ondragstart="return false;">
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="sr-only">Следующая</span>
+    </a>
+    <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">Предыдущая</span>
+    </a>
+</div>
+
+        {% endif %}
+
+        <div>
+            {% include 'comments.html' %}
+        </div>
+    </div>
+{% endblock %}

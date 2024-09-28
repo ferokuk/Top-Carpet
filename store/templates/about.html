@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="container custom-top-margin mb-3">
+    <div class="row">
+        <!-- 1st section: Text - Image -->
+        <div class="col-md-6">
+            <h2>Добро пожаловать в TopCarpet</h2>
+            <p>Мы являемся ведущим поставщиком качественных ковров, предлагая широкий ассортимент изделий, которые
+                подойдут для любого интерьера. Наша компания основана на принципах качества, стиля и удобства, и мы
+                стремимся удовлетворить потребности каждого клиента.</p>
+        </div>
+        <div class="col-md-6">
+            <img ondragstart="return false;" src="{% static 'images/about/about-1.png' %}" class="img-fluid" alt="Placeholder Image">
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <img ondragstart="return false;" src="{% static 'images/about/about-2.png' %}" class="img-fluid" alt="Placeholder Image">
+        </div>
+        <div class="col-md-6">
+            <h2>Более десяти лет</h2>
+            <p>Мы гордимся нашей репутацией надежного поставщика ковров высокого качества. Мы работаем непосредственно с
+                лучшими производителями, чтобы предоставить вам самый широкий выбор ковров различных стилей, материалов
+                и цветов.</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <h2>Создайте уютный дом с TopCarpet</h2>
+            <p>Наша цель - помочь вам создать дом, который вы заслуживаете, где каждая комната будет наполнена теплом,
+                комфортом и стилем. Наша дружелюбная и компетентная команда всегда готова помочь вам с выбором, дать
+                рекомендации и ответить на все ваши вопросы.</p>
+        </div>
+        <div class="col-md-6">
+            <img ondragstart="return false;" src="{% static 'images/about/about-3.png' %}" class="img-fluid" alt="Placeholder Image">
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <img ondragstart="return false;" src="{% static 'images/about/about-4.png' %}" class="img-fluid about-img" alt="Placeholder Image">
+        </div>
+        <div class="col-md-6">
+            <h2>Качество и удобство для вас</h2>
+            <p>Покупая ковры в TopCarpet, вы можете быть уверены в качестве продукции, отличном обслуживании и удобных
+                условиях доставки. Мы стремимся к тому, чтобы ваше покупательское преживание было приятным и
+                беззаботным, чтобы вы могли сосредоточиться на том, что действительно важно - наслаждаться вашим новым,
+                стильным и уютным интерьером.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

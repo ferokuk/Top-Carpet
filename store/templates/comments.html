@@ -1,0 +1,133 @@
+{% load my_tags %}
+<hr style="background-color: orange">
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        {% if can_comment %}
+            <div class="form-container">
+                <h2 class="text-center"></h2>
+                <form method="post"
+                      action="{% url "store:add_comment" carpet_id=request.resolver_match.kwargs.carpet_id %}">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="rating">Рейтинг</label>
+                        <div class="input-group">
+                            {% for i in "12345" %}
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio" id="rating{{ i }}" name="rating" value="{{ i }}"
+                                           class="custom-control-input"
+                                           {% if comment.rating|stringformat:"d" == i %}checked{% endif %} required>
+                                    <label class="custom-control-label" for="rating{{ i }}">
+                                        {{ i }}
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                             viewBox="0 0 24 24">
+                                            <path d="M0 0h24v24H0z" fill="none"/>
+                                            <path fill="#FFD700"
+                                                  d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                                        </svg>
+                                    </label>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="text">
+                            {% if comment %}
+                                Это ваш отзыв. Вы можете его отредактировать или удалить.
+                            {% else %}
+
+                                Оставьте отзыв
+                            {% endif %}</label>
+                        <textarea id="text" name="text" placeholder="Максимум 500 символов" class="form-control"
+                                  rows="4" maxlength="500" required>{{ comment.text }}</textarea>
+                    </div>
+                    <button type="submit" class="btn btn-custom btn-block">{% if comment %}Изменить{% else %}
+                        Отправить{% endif %}</button>
+                </form>
+                {% if comment %}
+                    <form method="post"
+                          class="mt-2"
+                          action="{% url "store:remove_comment" carpet_id=request.resolver_match.kwargs.carpet_id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger btn-block">Удалить</button>
+                    </form>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% if comments %}
+    <div class="comment-list">
+        {% for comment in comments %}
+            <div class="card comment-card bg-dark custom-border mt-3 rounded">
+                <div class="card-header">
+                    <span class="float-left">
+                    <strong>{{ comment.user.username }} {{ comment.rating }}
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                          <path d="M0 0h24v24H0z" fill="none"/>
+                          <path fill="#FFD700"
+                                d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                        </svg>
+                    </strong>
+                        {% if comment.created_at > comment.created_at|timesince %}
+                            {{ comment.created_at|date:"d.m.Y H:i" }}
+                        {% else %}
+                            {{ comment.created_at|timesince }} назад
+                        {% endif %}
+                        {% if comment.created_at != comment.updated_at %}
+                            <span data-toggle="tooltip"
+                                  data-placement="right"
+                                  title="{% if comment.updated_at > comment.updated_at|timesince %}
+                            {{ comment.updated_at|date:"d.m.Y H:i" }}
+                        {% else %}
+                            {{ comment.updated_at|timesince }} назад
+                        {% endif %}" class="font-italic ml-3">изменено</span>
+                        {% endif %}
+                    </span>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">{{ comment.text }}</p>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <style>
+        .page-item.active .page-link,
+        .page-link:hover {
+            background-color: orange;
+            border-color: orange;
+            color: white;
+        }
+
+        .page-link {
+            color: orange;
+        }
+    </style>
+    <nav>
+        <ul class="pagination justify-content-center my-4 bg-dark navbar-dark">
+            <div class="custom-shadow d-flex ">
+                <li class="page-item {% if not comments.has_previous %}disabled{% endif %} ">
+                    <a class="page-link" href="
+                        {% if comments.has_previous %}?
+
+                                {% change_params page=comments.previous_page_number %}{% else %}#{% endif %}">Назад</a>
+                </li>
+
+                {% for page in comments.paginator.page_range %}
+                    {% if page >= comments.number|add:-2 and page <= comments.number|add:2 %}
+                        <li class="page-item {% if comments.number == page %}active{% endif %}">
+                            <a class="page-link" href="?{% change_params page=page %}">{{ page }}</a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+
+                <li class="page-item {% if not comments.has_next %}disabled{% endif %} ">
+                    <a class="page-link" href="{% if comments.has_next %}?
+
+                                {% change_params page=comments.next_page_number %}{% else %}#{% endif %}">Следующая</a>
+                </li>
+            </div>
+        </ul>
+    </nav>
+{% else %}
+    <p class="row justify-content-center h3">Отзывов пока нет. Станьте первым, кто оставит отзыв!</p>
+{% endif %}

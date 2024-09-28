@@ -1,0 +1,67 @@
+{% load my_tags %}
+{% load humanize %}
+<div>
+    {% if messages %}
+        {% for message in messages %}
+            <div class="text-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+
+    {% endif %}
+</div>
+<div class="row">
+    {% if not products %}
+        <div class="display-3 mx-auto custom-top-margin">Ничего не нашлось</div>
+    {% endif %}
+    {% for product in products %}
+        <div class="col-md-3 mb-4">
+            <div class="product-card custom-border">
+                {% with first_image=product.carpet.images.first %}
+                    <a href="{% url "catalog:carpet_details" carpet_id=product.carpet.pk %}">
+                        <div class="image-container position-relative">
+                            <img class="card-img-top zoom-image rounded-lg"
+                                 src="{{ first_image.image.url }}"
+                                 alt="Card image cap" width="300" height="500"
+                                 ondragstart="return false;">
+                            {% if request.user.is_authenticated %}
+                                <div class="position-absolute" style="top: 10px; right: 10px;">
+                                    <button class="btn {% if product.is_favorite %}btn-danger{% else %}btn-outline-danger{% endif %} btn-sm add-to-fav"
+                                            type="button"
+                                            data-carpet-id="{{ product.carpet.id }}"
+                                            data-url="{% url "store:add_to_favs" %}"
+                                            title="Добавить в избранное">
+                                        {% csrf_token %}
+                                        <i class="fas fa-heart"></i>
+                                    </button>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </a>
+                {% endwith %}
+                <div class="card-body custom-bg">
+                    <a href="{% url "catalog:carpet_details" carpet_id=product.carpet.pk %}"
+                       class="text-decoration-none black text-white">
+                        <h5 class="card-title h2">
+                            <span class="small">от</span> {{ product.carpet.min_price|intcomma }} ₽
+
+                        </h5>
+                        {% if product.carpet.avg_rating %}
+                            <h5>{{ product.carpet.avg_rating|floatformat:"2" }}
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
+                                    <path d="M0 0h24v24H0z" fill="none"/>
+                                    <path fill="#FFD700"
+                                          d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                                </svg>
+                            </h5>
+                        {% else %}
+                            <h5>Нет отзывов</h5>
+                        {% endif %}
+                    </a>
+                    <p class="text-muted">{{ product.carpet.materials.all|join:", "|truncatechars:35 }}. {{ product.carpet.country }}</p>
+                    <p class="card-text h4">{{ product.carpet.name }}</p>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+
+
+</div>

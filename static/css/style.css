@@ -1,0 +1,270 @@
+.custom-navbar {
+    border-bottom: 2px solid orange; /* Устанавливаем оранжевую границу снизу */
+    min-height: 100px;
+    background-color: #332f2f;
+}
+
+footer {
+    margin-top: auto;
+    border-top: 2px solid orange;
+    background-color: #332f2f;
+}
+
+
+input[type="checkbox"] {
+    /* Hide default checkbox */
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    /* Define checkbox size */
+    width: 20px;
+    height: 20px;
+    /* Define checkbox border */
+    border: 2px solid #999;
+    border-radius: 4px;
+    /* Define checkbox background color */
+    background-color: #fff;
+    /* Position checkbox relative to label */
+    position: relative;
+    top: 6px;
+}
+
+input[type="checkbox"]:checked {
+    /* Change background color */
+    background-color: orange; /* Change to desired color */
+}
+
+input[type="checkbox"]:checked:before {
+    /* Content to display */
+    content: '\2713'; /* Unicode checkmark character */
+    /* Position checkmark */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    /* Adjust alignment */
+    transform: translate(-50%, -50%);
+    /* Define font size and color */
+    font-size: 16px;
+    color: black; /* Color of checkmark */
+}
+
+.custom-border {
+    border-bottom: orange solid 2px;
+    border-radius: 5px;
+    border-left: orange solid 2px;
+    border-right: orange solid 2px;
+    border-top: orange solid 2px;
+}
+
+.custom-dark-border {
+    border-bottom: orange solid 2px;
+    border-left: orange solid 2px;
+    border-right: orange solid 2px;
+    border-top: orange solid 2px;
+}
+
+.custom-dark-border:hover {
+    border-bottom: #332f2f solid 2px;
+    border-left: #332f2f solid 2px;
+    border-right: #332f2f solid 2px;
+    border-top: #332f2f solid 2px;
+}
+
+.custom-bg {
+    background-color: #332f2f;
+}
+
+.orange-bg:hover {
+    background-color: #f1c374;
+}
+
+.orange-bg:focus {
+    background-color: #d9ac52;
+}
+
+.active-orange-bg {
+    background-color: orange;
+}
+
+body {
+    background-color: #343a40; /* темный цвет фона */
+    color: #ffffff; /* цвет текста */
+    overflow-y: scroll;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+
+.jumbotron {
+    background-color: #343a40; /* темный цвет фона */
+    color: #ffffff; /* цвет текста */
+    padding: 2rem 1rem; /* внутренние отступы */
+}
+
+.custom-top-margin {
+    margin-top: 110px; /* Adjust this value according to your needs */
+}
+
+/* Скрыть вертикальный скроллбар */
+::-webkit-scrollbar {
+    display: none;
+}
+
+/* Скрыть горизонтальный скроллбар */
+::-webkit-scrollbar-horizontal {
+    display: none;
+}
+
+/* Дополнительные стили для кроссбраузерности */
+html {
+    overflow: -moz-scrollbars-none; /* Firefox */
+    -ms-overflow-style: none; /* IE и Edge */
+}
+
+.about-img {
+    height: 400px;
+    width: 600px;
+}
+
+.filters {
+    background-color: #f8f9fa;
+    padding: 20px;
+}
+
+/* Определяем стили для блока с товарами */
+.products {
+    padding: 20px;
+}
+
+.carpet-image-main {
+    height: 90%;
+    width: 90%;
+}
+
+.toast-container {
+    position: fixed;
+    bottom: 20px; /* расстояние от нижнего края экрана */
+    right: 20px; /* расстояние от правого края экрана */
+    z-index: 10000; /* чтобы убедиться, что toast отображается над другими элементами */
+}
+
+.btn-custom {
+    background-color: #fd7e14; /* Orange button */
+    color: white;
+}
+.btn-custom:hover {
+    background-color: #e67e22; /* Darker orange on hover */
+}
+
+.custom-radio .custom-control-input:checked ~ .custom-control-label::before {
+    background-color: #fd7e14; /* Orange background for checked radio buttons */
+}
+
+.custom-control-input:checked ~ .custom-control-label::before {
+    background-color: #fd7e14; /* Orange background for checked radio buttons */
+    border-color: #fd7e14; /* Orange border for checked radio buttons */
+}
+
+.custom-control-input:focus ~ .custom-control-label::before {
+    box-shadow: 0 0 0 1px #343a40, 0 0 0 3px rgba(253, 126, 20, 0.25); /* Customize focus shadow to match theme */
+}
+
+.color-circle {
+    width: 30px; /* Adjust width and height as needed */
+    height: 30px;
+    border-radius: 50%; /* Make it a circle */
+    display: inline-block;
+    margin-left: 5px;
+}
+.image-container {
+    overflow: hidden;
+    display: flex; /* Adjust to arrange images as needed */
+    flex-wrap: wrap; /* Allows wrapping of images to the next line */
+}
+
+.zoom-image {
+    transition: transform 0.2s ease-out;
+    cursor: crosshair; /* Change the cursor to crosshair */
+}
+
+.image-container:hover .zoom-image {
+    transform: scale(2); /* Adjust the scale value to control the zoom level */
+}
+
+@media (max-width: 1200px) {
+    .image-carousel {
+        height: 80%;
+        width: 80%;
+    }
+    .card-img-top {
+        height: 220px;
+    }
+    .product-card {
+        min-height: 400px;
+        background-color: #332f2f;
+    }
+    .h2 {
+        font-size: 17px;
+    }
+    .h4 {
+        font-size: 12px;
+    }
+    h5 {
+        font-size: 10px;
+    }
+    .text-muted {
+        font-size: 8px;
+    }
+}
+
+@media (max-width: 1600px) {
+    .card-img-top {
+        height: 220px;
+    }
+    .form-check-label {
+        font-size: 13px;
+    }
+    .product-card {
+        min-height: 400px;
+        background-color: #332f2f;
+    }
+
+    .h2 {
+        font-size: 20px;
+    }
+    .h4 {
+        font-size: 15px;
+    }
+    h5 {
+        font-size: 12px;
+    }
+    .text-muted {
+        font-size: 10px;
+    }
+}
+
+@media (max-width: 1850px) {
+    .card-img-top {
+        height: 240px;
+        max-width: 400px;
+    }
+    .product-card {
+        min-height: 450px;
+        max-width: 400px;
+        background-color: #332f2f;
+    }
+
+    .h2 {
+        font-size: 22px;
+    }
+    .h4 {
+        font-size: 18px;
+    }
+    h5 {
+        font-size: 14px;
+    }
+    .text-muted {
+        font-size: 11px;
+    }
+}

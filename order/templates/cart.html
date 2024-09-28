@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+    {{ title }}
+{% endblock %}
+{% block content %}
+    <div class="toast-container"></div>
+    <div class="container-fluid custom-top-margin" id="cart_items_list">
+        {% include 'cart_items_list.html' %}
+    </div>
+
+{% endblock %}

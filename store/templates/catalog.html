@@ -1,0 +1,174 @@
+{% extends 'base.html' %}
+{% load my_tags %}
+{% load static %}
+{% block content %}
+    <div class="toast-container"></div>
+    <div class="container-fluid custom-top-margin">
+        <div class="row">
+            <div class="col ml-2 custom-bg custom-border mb-4">
+                <h4>Фильтры</h4>
+                <form action="{% url "store:catalog" %}" method="GET">
+                    <div class="row">
+                        <div class="col">
+                            <input class="form-control"
+                                   type="search" placeholder="Название" aria-label="Search"
+                                   value="{{ request.GET.search }}"
+                                   name="search">
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col">
+                            <button type="submit" class="btn btn-warning" id="search">Показать</button>
+                        </div>
+                    </div>
+                    <div class="form-group mt-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="favs" name="favorites" value="true"
+                                   {% if favs_carpet_count == 0 %}disabled{% endif %}
+                                   {% if "favorites" in request.GET %}checked{% endif %}>
+                            <label class="form-check-label"
+                                   for="favs">Избранное</label>
+                            {% if favs_carpet_count != 0 %}
+                                <span class="badge text-white">({{ favs_carpet_count }})</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="form-group mt-3">
+                        <label>Цена:</label>
+                        <div class="custom-control custom-radio">
+                            <input type="radio" id="priceAsc" name="price_sort" class="custom-control-input" value="asc"
+                                   {% if request.GET.price_sort == "asc" %}checked{% endif %}>
+                            <label class="custom-control-label" for="priceAsc">Сначала дешёвые</label>
+                        </div>
+                        <div class="custom-control custom-radio">
+                            <input type="radio" id="priceDesc" name="price_sort" class="custom-control-input"
+                                   value="desc"
+                                   {% if request.GET.price_sort == "desc" %}checked{% endif %}>
+                            <label class="custom-control-label" for="priceDesc">Сначала дорогие</label>
+                        </div>
+                    </div>
+                    <div class="form-group mt-3">
+                        <label>Наличие:</label>
+                        <div class="custom-control custom-radio">
+                            <input type="radio" id="quantityHave" name="quantity" class="custom-control-input"
+                                   value="have"
+                                   {% if request.GET.quantity == "have" %}checked{% endif %}>
+                            <label class="custom-control-label" for="quantityHave">В наличии</label>
+                        </div>
+                        <div class="custom-control custom-radio">
+                            <input type="radio" id="quantityWait" name="quantity" class="custom-control-input"
+                                   value="wait"
+                                   {% if request.GET.quantity == "wait" %}checked{% endif %}>
+                            <label class="custom-control-label" for="quantityWait">Под заказ</label>
+                        </div>
+                    </div>
+                    <div class="form-group mt-3">
+                        <label>Категория:</label>
+                        <div>
+                            {% for category in categories %}
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox"
+                                           id="category_{{ category.id }}"
+                                           name="category" value="{{ category.id }}"
+                                           {% if category.carpet_count == 0 %}disabled{% endif %}
+                                           {% if category.id|stringformat:"d" in params.category %}checked{% endif %}>
+                                    <label class="form-check-label"
+                                           for="category_{{ category.id }}">{{ category.name }}</label>
+                                    {% if category.carpet_count != 0 %}
+                                        <span class="badge text-white">({{ category.carpet_count }})</span>
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Материалы:</label>
+                        <div>
+                            {% for material in materials %}
+                                <div class="form-check">
+                                    <input class="form-check-input orange-checkbox" type="checkbox"
+                                           id="material_{{ material.id }}"
+                                           name="material"
+                                           {% if material.carpet_count == 0 %}disabled{% endif %}
+                                           value="{{ material.id }}"
+                                           {% if material.id|stringformat:"d" in params.material %}checked{% endif %}>
+                                    <label class="form-check-label"
+                                           for="material_{{ material.id }}">{{ material.name }}</label>
+                                    {% if material.carpet_count != 0 %}
+                                        <span class="badge text-white">({{ material.carpet_count }})</span>
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Страны:</label>
+                        <div>
+                            {% for country in countries %}
+                                <div class="form-check">
+                                    <input class="form-check-input orange-checkbox" type="checkbox"
+                                           id="country_{{ country.id }}"
+                                           name="country"
+                                           value="{{ country.id }}"
+                                           {% if country.carpet_count == 0 %}disabled{% endif %}
+                                           {% if country.id|stringformat:"d" in params.country %}checked{% endif %}>
+                                    <label class="form-check-label"
+                                           for="country_{{ material.id }}">{{ country.name }}</label>
+                                    {% if country.carpet_count != 0 %}
+                                        <span class="badge text-white">({{ country.carpet_count }})</span>
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="col-md-10" id="catalog">
+                {% include 'products.html' %}
+            </div>
+        </div>
+        <div class="container-fluid">
+            {% if products %}
+                <style>
+                    .page-item.active .page-link,
+                    .page-link:hover {
+                        background-color: orange;
+                        border-color: orange;
+                        color: white;
+                    }
+
+                    .page-link {
+                        color: orange;
+                    }
+                </style>
+                <nav>
+                    <ul class="pagination justify-content-center my-4 bg-dark navbar-dark">
+                        <div class="custom-shadow d-flex ">
+                            <li class="page-item {% if not products.has_previous %}disabled{% endif %} ">
+                                <a class="page-link" href="
+                        {% if products.has_previous %}?
+
+                                {% change_params page=products.previous_page_number %}{% else %}#{% endif %}">Назад</a>
+                            </li>
+
+                            {% for page in products.paginator.page_range %}
+                                {% if page >= products.number|add:-2 and page <= products.number|add:2 %}
+                                    <li class="page-item {% if products.number == page %}active{% endif %}">
+                                        <a class="page-link" href="?{% change_params page=page %}">{{ page }}</a>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+
+                            <li class="page-item {% if not products.has_next %}disabled{% endif %} ">
+                                <a class="page-link" href="{% if products.has_next %}?
+
+                                {% change_params page=products.next_page_number %}{% else %}#{% endif %}">Следующая</a>
+                            </li>
+                        </div>
+                    </ul>
+                </nav>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

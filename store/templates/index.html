@@ -1,0 +1,78 @@
+<!-- templates/index.html -->
+
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Главная страница{% endblock %}
+
+{% block css %}
+{% endblock %}
+
+{% block content %}
+    <div class="container custom-top-margin">
+        <div class="row mb-3">
+            <div class="col">
+                <img src="{% static "images/index/1.jpg" %}" class="img-fluid rounded">
+
+            </div>
+            <div class="col">
+                <h1 class="mt-5">Добро пожаловать в TopCarpet</h1>
+                <p class="lead">Мы специализируемся на продаже высококачественных ковров для вашего дома и офиса. У нас
+                    вы
+                    найдете широкий выбор ковров различных стилей, размеров и материалов по доступным ценам.</p>
+
+            </div>
+        </div>
+        <div class="d-flex justify-content-center align-items-center">
+            <h1>Нам доверяют!</h1>
+        </div>
+        <div id="carouselContent" class="carousel slide mb-5" data-ride="carousel">
+            <ol class="carousel-indicators mb-1">
+                <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+                <li data-target="#carouselExampleIndicators" data-slide-to="3"></li>
+                <li data-target="#carouselExampleIndicators" data-slide-to="4"></li>
+            </ol>
+            <div class="carousel-inner" role="listbox">
+                <div class="carousel-item active text-center p-4">
+
+                    <p class="h2"><img src="{% static "images/avatar-placeholder.png" %}" width="64"
+                                       class="rounded-circle">
+                        <strong class="ml-2">Иван Иванов</strong>
+                    </p>
+                    <p class="h5 text-break">Отличный магазин! <br>Купил здесь ковер для гостиной, очень доволен качеством и
+                        сервисом.</p>
+                </div>
+                <div class="carousel-item text-center p-4">
+                    <p class="h2"><img src="{% static "images/avatar-placeholder.png" %}" width="64"
+                                       class="rounded-circle"><strong class="ml-2">Елена Петрова</strong></p>
+                    <p class="h5">Большой выбор ковров, приветливый персонал. <br>Рекомендую TopCarpet!</p>
+                </div>
+                <div class="carousel-item text-center p-4">
+                    <p class="h2"><img src="{% static "images/avatar-placeholder.png" %}" width="64"
+                                       class="rounded-circle"><strong class="ml-2">Александр Сидоров</strong></p>
+                    <p class="h5">Спасибо за качественный ковер и быструю доставку. <br>Очень доволен!</p>
+                </div>
+                <div class="carousel-item text-center p-4">
+                    <p class="h2"><img src="{% static "images/avatar-placeholder.png" %}" width="64"
+                                       class="rounded-circle"><strong class="ml-2">Мария Иванова</strong></p>
+                    <p class="h5">TopCarpet - лучший выбор ковров в городе! <br>Отличное соотношение цены и качества.</p>
+                </div>
+                <div class="carousel-item text-center p-4">
+                    <p class="h2"><img src="{% static "images/avatar-placeholder.png" %}" width="64"
+                                       class="rounded-circle"><strong class="ml-2">Петр Смирнов</strong></p>
+                    <p class="h5">Отличный магазин с широким асортиментом кавров. <br>Всем рекомендую!</p>
+                </div>
+            </div>
+            <a class="carousel-control-prev" href="#carouselContent" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#carouselContent" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
+        </div>
+    </div>
+{% endblock %}

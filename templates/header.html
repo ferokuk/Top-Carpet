@@ -1,0 +1,69 @@
+{% load static %}
+{% block header %}
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark custom-navbar fixed-top">
+            <div class="ml-2">
+                <a class="navbar-brand font-weight-bold" href="{% url 'index' %}">TopCarpet</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse"
+                        data-target="#navbarSupportedContent"
+                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ml-auto mr-3">
+
+                    <li class="nav-item {% if current_page == 'index' %}active{% endif %}">
+                        <a class="nav-link lead font-weight-bold" href="{% url 'index' %}">Главная <span
+                                class="sr-only">(текущая)</span></a>
+                    </li>
+                    <li class="nav-item {% if current_page == 'about' %}active{% endif %}">
+                        <a class="nav-link lead font-weight-bold" href="{% url 'about' %}">О нас</a>
+                    </li>
+                    <li class="nav-item {% if current_page == 'catalog' %}active{% endif %}">
+                        <a class="nav-link lead font-weight-bold" href="{% url 'catalog:catalog' %}">Каталог</a>
+                    </li>
+                    {% if user.is_authenticated %}
+                        <li class="nav-item {% if current_page == "cart" %}active{% endif %}">
+                            <a class="nav-link lead font-weight-bold" href="{% url "order:cart" %}">Корзина</a>
+                        </li>
+                        <li class="nav-item {% if current_page == "profile" %}active{% endif %}">
+                            <a class="nav-link lead font-weight-bold"
+                               href="{% url "user:profile" %}">
+                                Профиль
+                            </a>
+                        </li>
+                        {% if request.user.is_superuser %}
+                            <li class="nav-item">
+                                <a class="nav-link lead font-weight-bold"
+                                   href="/admin/">
+                                    Админ-панель
+                                </a>
+                            </li>
+                        {% endif %}
+                        <li class="nav-item {% if current_page == "orders" %}active{% endif %}">
+                            <a class="nav-link lead font-weight-bold"
+                               href="{% url "order:my_orders" %}">
+                                Заказы
+                            </a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item {% if current_page == "login" %}active{% endif %}">
+                            <a class="nav-link lead font-weight-bold"
+                               href="{% url "user:login" %}">
+                                Вход
+                            </a>
+                        </li>
+                        <li class="nav-item {% if current_page == "registration" %}active{% endif %}">
+                            <a class="nav-link lead font-weight-bold"
+                               href="{% url "user:registration" %}">
+                                Регистрация
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+
+            </div>
+        </nav>
+    </header>
+{% endblock %}
