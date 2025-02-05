@@ -93,10 +93,12 @@ def catalog(request):
 def carpet_details(request, carpet_id: int):
     carpet = get_object_or_404(Carpet.objects.filter(id=carpet_id))
     comments = Comment.objects.filter(carpet=carpet.id).all()
-    can_comment = request.user.is_authenticated and \
-                  OrderItem.objects.filter(carpet_size__carpet=carpet, order__user_id=request.user.id).exists()
+    if request.user.is_authenticated:
+        can_comment = OrderItem.objects.filter(carpet_size__carpet=carpet, order__user_id=request.user.id).exists()
+    else:
+        can_comment = False
     sizes = CarpetSize.objects.filter(carpet=carpet.id).order_by('price').all()
-    comment = Comment.objects.filter(user=request.user, carpet=carpet).first()
+    comment = Comment.objects.filter(user=request.user.id, carpet=carpet).first()
     page = request.GET.get('page', 1)
     paginator = Paginator(comments, 20)
     current_page = paginator.page(int(page))

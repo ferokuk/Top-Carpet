@@ -35,7 +35,7 @@ def add_to_cart(request):
     carpet = CarpetSize.objects.get(id=carpet_size_id)
     if carpet.quantity == 0:
         return JsonResponse({"type": "Ошибка", "message": "Этого ковра нет в наличии"})
-    carts = Cart.objects.filter(user=request.user, carpet_size=carpet)
+    carts = Cart.objects.filter(user=request.user.id, carpet_size=carpet)
 
     if carts.exists():
         cart = carts.first()

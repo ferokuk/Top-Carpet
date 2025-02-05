@@ -1,4 +1,5 @@
 $(document).ready(function () {
+    let cur_size_id = $("#first_size").val();
     $('.zoom-image').on('mousemove', function (event) {
         const imageContainer = $(this).parent();
         const zoomImage = $(this);
@@ -87,7 +88,7 @@ $(document).ready(function () {
             },
         });
     });
-    let cur_size_id = undefined;
+
 
     $(document).on("click", ".size-btn", function (e) {
         let size_id = $(this).data("size-id");

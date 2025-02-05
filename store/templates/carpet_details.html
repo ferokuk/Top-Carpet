@@ -27,9 +27,13 @@
                     <div class="row">
                         {% for size in sizes %}
                             <div class="col-md-5">
-                                <div class="btn mb-1 size-btn {% if forloop.first %}active-orange-bg{% else %}btn-secondary{% endif %}" data-size-id="{{ size.id }}" data-url="{% url "store:get_quantity" %}">
+                                <div class="btn mb-1 size-btn {% if forloop.first %}active-orange-bg{% else %}btn-secondary{% endif %}"
+                                     data-size-id="{{ size.id }}" data-url="{% url "store:get_quantity" %}">
                                     {% csrf_token %}
                                     {{ size.width }} x {{ size.length }} см.
+                                    {% if forloop.first %}
+                                        <input id="first_size" value="{{ size.id }}" hidden type="text">
+                                    {% endif %}
                                 </div>
                             </div>
                         {% endfor %}
@@ -129,32 +133,32 @@
         </div>
         {% if carpet.images.all|length > 1 %}
             <div id="carouselExampleIndicators" class="carousel slide custom-top-margin" data-ride="carousel">
-    <ol class="carousel-indicators">
-        {% for image in carpet.images.all|slice:"1:" %}
-            <li data-target="#carouselExampleIndicators" data-slide-to="{{ forloop.counter0 }}"
-                class="{% if forloop.first %}active{% endif %}"></li>
-        {% endfor %}
-    </ol>
-    <div class="carousel-inner">
-        {% for image in carpet.images.all|slice:"1:" %}
-            <div class="carousel-item {% if forloop.first %}active{% endif %}">
-                <!-- Wrap each image in a separate div -->
-                <div class="image-container">
-                    <img class="zoom-image d-block image-carousel img-fluid" src="../../../{{ image }}"
-                         alt="Carousel Image" style="margin: 0 auto;" ondragstart="return false;">
+                <ol class="carousel-indicators">
+                    {% for image in carpet.images.all|slice:"1:" %}
+                        <li data-target="#carouselExampleIndicators" data-slide-to="{{ forloop.counter0 }}"
+                            class="{% if forloop.first %}active{% endif %}"></li>
+                    {% endfor %}
+                </ol>
+                <div class="carousel-inner">
+                    {% for image in carpet.images.all|slice:"1:" %}
+                        <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                            <!-- Wrap each image in a separate div -->
+                            <div class="image-container">
+                                <img class="zoom-image d-block image-carousel img-fluid" src="../../../{{ image }}"
+                                     alt="Carousel Image" style="margin: 0 auto;" ondragstart="return false;">
+                            </div>
+                        </div>
+                    {% endfor %}
                 </div>
+                <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Следующая</span>
+                </a>
+                <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Предыдущая</span>
+                </a>
             </div>
-        {% endfor %}
-    </div>
-    <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="sr-only">Следующая</span>
-    </a>
-    <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="sr-only">Предыдущая</span>
-    </a>
-</div>
 
         {% endif %}
 
